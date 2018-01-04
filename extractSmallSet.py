@@ -6,13 +6,14 @@ activeMolecules = Chem.SDMolSupplier("/home/knzk574/Desktop/Data/combinedactive.
 inactiveMolecules = Chem.SDMolSupplier("/home/knzk574/Desktop/Data/combined_inactive.sdf")
 
 smallActiveSet = [activeMolecules[i] for i in range(1000)]
-smallInactiveSet = [inactiveMolecules[i] for i in range(len(inactiveMolecules)/10)]
+smallInactiveSet = [inactiveMolecules[i] for i in range(len(inactiveMolecules)/100)]
 
-with open("smallInactiveSet", "w") as f:
-    pickle.dump(smallInactiveSet, f)
-with open("smallActiveSet", "w") as f:
-    pickle.dump(smallActiveSet, f)
+with open("smallInactiveSet", "w") as wewe:
+    pickle.dump(smallInactiveSet, wewe)
+with open("smallActiveSet", "w") as dgrwe:
+    pickle.dump(smallActiveSet, dgrwe)
 
+print "Sets are ready, staring generation of descriptors"
 
 
 

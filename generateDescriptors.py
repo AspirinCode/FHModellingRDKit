@@ -6,10 +6,14 @@ from rdkit.Chem import Descriptors
 from rdkit.ML.Descriptors.MoleculeDescriptors import MolecularDescriptorCalculator as MDC
 import pickle
 
-with open("smallInactiveSet", "r") as f:
-    smallInactiveSet = pickle.load(f)
-with open("smallActiveSet", "r") as f:
-    smallActiveSet= pickle.load(f)
+
+activeMolecules = Chem.SDMolSupplier("/home/knzk574/Desktop/Data/combinedactive.sdf")
+inactiveMolecules = Chem.SDMolSupplier("/home/knzk574/Desktop/Data/combined_inactive.sdf")
+
+# with open("smallInactiveSet", "r") as f:
+#     smallInactiveSet = pickle.load(f)
+# with open("smallActiveSet", "r") as f:
+#     smallActiveSet= pickle.load(f)
 
 
 def makeDescriptorTable(tableobj, outcome):
@@ -27,18 +31,25 @@ descriptorList = [desc[0] for desc in Descriptors.descList]
 calc = MDC(descriptorList)
 
 activesdesc = []
-for i in smallActiveSet:
+
+LOG_EVERY_N = 100
+
+for i, mol in enumerate(activeMolecules):
         try:
-            if i.GetNumHeavyAtoms() > 0:
-                activesdesc.append(MDC.CalcDescriptors(calc, i))
+            if mol.GetNumHeavyAtoms() > 0:
+                activesdesc.append(MDC.CalcDescriptors(calc, mol))
+                if (i % LOG_EVERY_N) == 0:
+                    print str(i)+" molecules processed"
         except:
             print "Error while processing "
 
 inactivedesc = []
-for i in smallInactiveSet:
+for i, mol in enumerate(inactiveMolecules):
         try:
-            if i.GetNumHeavyAtoms() > 0:
-                inactivedesc.append(MDC.CalcDescriptors(calc, i))
+            if mol.GetNumHeavyAtoms() > 0:
+                inactivedesc.append(MDC.CalcDescriptors(calc, mol))
+                if (i%LOG_EVERY_N) == 0:
+                    print str(i)+" molecules processed"
         except:
             print "Error while processing "
 #inactivedesc = [MDC.CalcDescriptors(calc,i) for i in smallInactiveSet]
@@ -49,8 +60,9 @@ descDfInactive = makeDescriptorTable(inactivedesc, 0)
 
 descDfAll = pd.concat([descDfActive, descDfInactive], ignore_index=True)
 
-pickledump(descDfAll, "descdfAll")
+descDfAll.to_csv("descDFAll.csv")
 
+print "Descriptors are ready. Moving on to prep the data"
 
+#pickledump(descDfAll, "descdfAll")
 
-viewTable(descDfAll)

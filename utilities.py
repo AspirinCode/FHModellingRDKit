@@ -16,6 +16,7 @@ def viewTable(table):
 def pickledump(obj,filename):
     with open(filename, "w") as f:
        pickle.dump(obj, f)
+       f.close()
 
 def pickleload(filename):
     with open(filename, "r") as f:
