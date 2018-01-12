@@ -8,22 +8,22 @@ from multiprocessing import Pool
 import utilities
 
 
-activeMolecules = Chem.SDMolSupplier("/home/knzk574/Desktop/Data/set3_actives.sdf")
-inactiveMolecules = Chem.SDMolSupplier("/home/knzk574/Desktop/Data/set3_inactives.sdf")
+# activeMolecules = Chem.SDMolSupplier("/home/knzk574/Desktop/Data/set3_actives.sdf")
+# inactiveMolecules = Chem.SDMolSupplier("/home/knzk574/Desktop/Data/set3_inactives.sdf")
 
-# with open("smallInactiveSet", "r") as f:
-#     smallInactiveSet = pickle.load(f)
-# with open("smallActiveSet", "r") as f:
-#     smallActiveSet= pickle.load(f)
+with open("smallInactiveSet", "r") as f:
+    activeMolecules = pickle.load(f)
+with open("smallActiveSet", "r") as f:
+    inactiveMolecules= pickle.load(f)
 
 
 def makeDescriptorTable(tableobj, outcome):
     descriptorTable = pd.DataFrame(tableobj)
-
+    print len(descriptorTable.columns)
     descriptorTable.columns = descriptorList
 
     descriptorTable['Outcome'] = outcome
-
+    print len(descriptorTable.columns)
     return descriptorTable
 
 
@@ -73,9 +73,12 @@ for i, mol in enumerate(inactiveMolecules):
 
 
 descDfActive = makeDescriptorTable(activesdesc, 1)
+print len(descDfActive.columns)
 descDfInactive = makeDescriptorTable(inactivedesc, 0)
+print len(descDfActive.columns)
 
 descDfAll = pd.concat([descDfActive, descDfInactive], ignore_index=True)
+print len(descDfActive.columns)
 
 descDfAll.to_csv("descDFAllSet3.csv")
 

@@ -13,7 +13,7 @@ def clean_dataset(df):
     return df[indices_to_keep].astype(np.float64)
 
 
-df = pd.read_csv("descDFAllSet3.csv")
+df = pd.read_csv("descDFAll.csv")
 
 
 
@@ -47,6 +47,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 modelRF = joblib.load("trainedSte3Model.pkl")
 
 y_pred = modelRF.predict(X_test)
+y_pred = modelRF.predict(X_train)
 
 print y_pred
 
