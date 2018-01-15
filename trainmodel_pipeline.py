@@ -21,7 +21,7 @@ def clean_dataset(df):
     indices_to_keep = ~df.isin([np.nan, np.inf, -np.inf]).any(1)
     return df[indices_to_keep].astype(np.float64)
 
-df = pd.read_csv("descDFAll.csv")
+df = pd.read_csv("descDFSmallSet.csv")
 
 
 
@@ -77,16 +77,16 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 
 #print(cross_val_score(clf, X_test, y_test, scoring='f1'))
 
-#model = svm.SVC()
-#model.fit(X_train, y_train)
-
-modelRF = RandomForestClassifier(n_estimators=300, max_depth=30, class_weight="balanced_subsample")
+# model = svm.SVC(C= 1, gamma= 0.0000001)
+# model.fit(X_train, y_train)
+#
+modelRF = RandomForestClassifier(n_estimators=1000, max_depth=5, max_features=10, class_weight="balanced")
 modelRF.fit(X_train, y_train)
-
-#y_pred = modelRF.predict(X_test)
-
-joblib.dump(modelRF, 'trainedSte3Model.pkl')
-
+#
+# #y_pred = modelRF.predict(X_test)
+#
+# joblib.dump(model, 'trainedSte3Model.pkl')
+#
 y_pred = modelRF.predict(X_test)
 y_predTr = modelRF.predict(X_train)
 
@@ -108,10 +108,16 @@ print clsr(y_train, y_predTr)
 
 
 #print sum(y_pred), sum(y_test)
-modelRF = RandomForestClassifier()
 
+modelRF = svm.SVC()
+
+
+param_grid = [
+  {'C': [1, 10, 100, 1000], 'gamma': [0.00000001, 0.0000000001, 0.00000000001], 'kernel': ['rbf'], 'class_weight':['balanced']}
+ ]
 
 # param_grid = {
+#
 #     "max_depth": [2,5,10,20,50,100],
 #     "n_estimators" : [10,50,100,200,500]
 #     # 'n_estimators': [500, 1000, 3000],
@@ -120,17 +126,17 @@ modelRF = RandomForestClassifier()
 #     # 'learning_rate': [0.1, 0.05, 0.02, 0.01],
 #     # 'max_features': [1.0, 0.3, 0.1],
 # }
-#
-# # Define the grid search we want to run. Run it with four cpus in parallel.
-# gs_cv = GridSearchCV(modelRF, param_grid, n_jobs=24, verbose=100, scoring="roc_auc")
-#
-# # Run the grid search - on only the training data!
-# gs_cv.fit(X_train, y_train)
-#
-# # Print the parameters that gave us the best result!
-# print (gs_cv.cv_results_)
-# print "\n\nThe opimized parameters is: "
-# print(gs_cv.best_params_)
+
+#Define the grid search we want to run. Run it with four cpus in parallel.
+gs_cv = GridSearchCV(modelRF, param_grid, n_jobs=4, verbose=100, scoring="f1")
+
+# Run the grid search - on only the training data!
+#gs_cv.fit(X_train, y_train)
+
+# Print the parameters that gave us the best result!
+print (gs_cv.cv_results_)
+print "\n\nThe opimized parameters is: "
+print(gs_cv.best_params_)
 
 #
 # print "For SVM"

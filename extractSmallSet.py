@@ -5,8 +5,8 @@ import pickle
 activeMolecules = Chem.SDMolSupplier("/home/knzk574/Desktop/Data/set3_actives.sdf")
 inactiveMolecules = Chem.SDMolSupplier("/home/knzk574/Desktop/Data/set3_inactives.sdf")
 
-smallActiveSet = [activeMolecules[i] for i in range(100)]
-smallInactiveSet = [inactiveMolecules[i] for i in range(len(inactiveMolecules)/10000)]
+smallActiveSet = [activeMolecules[i] for i in range(1000)]
+smallInactiveSet = [inactiveMolecules[i] for i in range(len(inactiveMolecules)/100)]
 
 with open("smallInactiveSet", "w") as wewe:
     pickle.dump(smallInactiveSet, wewe)

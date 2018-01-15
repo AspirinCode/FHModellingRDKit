@@ -11,9 +11,9 @@ import utilities
 # activeMolecules = Chem.SDMolSupplier("/home/knzk574/Desktop/Data/set3_actives.sdf")
 # inactiveMolecules = Chem.SDMolSupplier("/home/knzk574/Desktop/Data/set3_inactives.sdf")
 
-with open("smallInactiveSet", "r") as f:
-    activeMolecules = pickle.load(f)
 with open("smallActiveSet", "r") as f:
+    activeMolecules = pickle.load(f)
+with open("smallInactiveSet", "r") as f:
     inactiveMolecules= pickle.load(f)
 
 
@@ -80,7 +80,7 @@ print len(descDfActive.columns)
 descDfAll = pd.concat([descDfActive, descDfInactive], ignore_index=True)
 print len(descDfActive.columns)
 
-descDfAll.to_csv("descDFAllSet3.csv")
+descDfAll.to_csv("descDFSmallSet.csv")
 
 print "Descriptors are ready. Moving on to prep the data"
 utilities.viewTable(pd.DataFrame(activesdesc))
